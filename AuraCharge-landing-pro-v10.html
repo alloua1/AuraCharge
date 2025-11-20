@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AuraCharge — Unified Energy Skin for EVs</title>
+<meta name="description" content="AuraCharge Skin: a professional-grade, triple-harvest meta-material that powers EVs using solar, thermal, and kinetic energy.">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Palette sampled from car picture: charcoal road, titanium body, neon cyan trails, solar amber trails, sky blue */
+    --ink:#0b0f14;           /* deep charcoal */
+    --ink-2:#151b22;         /* slightly lighter */
+    --metal:#cfd6dd;         /* titanium silver */
+    --cyan:#00e5ff;          /* neon cyan */
+    --amber:#ffc247;         /* solar amber */
+    --sky:#7fd3ff;           /* sky blue */
+    --white:#ffffff;
+    --muted:#7a8a99;
+    --grad-1: linear-gradient(135deg,var(--ink) 0%, var(--ink-2) 40%, #213140 100%);
+    --grad-2: linear-gradient(90deg, var(--cyan) 0%, var(--sky) 50%, var(--amber) 100%);
+    --glass: rgba(255,255,255,.06);
+    --ring: var(--cyan);
+    --radius-xl: 28px;
+    --shadow-1: 0 20px 60px rgba(0,0,0,.35);
+    --shadow-2: 0 12px 30px rgba(0,0,0,.25);
+  }
+
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior:smooth }
+  body { font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; color:var(--white); background:var(--ink); line-height:1.6; }
+  a { color:inherit; text-decoration:none }
+  a:focus-visible, button:focus-visible, input:focus-visible { outline:3px solid var(--ring); outline-offset:2px; border-radius:10px }
+  .container { max-width:1200px; margin:0 auto; padding:0 20px }
+  .btn { display:inline-flex; gap:.6rem; align-items:center; padding:16px 28px; background:var(--grad-2); color:#001018; border:none; border-radius:999px; font-weight:800; letter-spacing:.2px; box-shadow:var(--shadow-2); cursor:pointer; transition:transform .2s, box-shadow .2s }
+  .btn:hover { transform:translateY(-2px); box-shadow:0 18px 40px rgba(0,229,255,.25) }
+  .btn.secondary { background:transparent; border:2px solid rgba(255,255,255,.7); color:var(--white) }
+  .badge { display:inline-block; padding:6px 12px; border-radius:999px; background:rgba(127,211,255,.15); color:var(--sky); font-weight:700; font-size:.85rem; letter-spacing:.3px }
+  .section-title { font-size:2.6rem; font-weight:800; line-height:1.2; letter-spacing:-.02em }
+  .section-subtitle { color:var(--muted); margin-top:12px; font-size:1.1rem }
+  .glass { background:var(--glass); border:1px solid rgba(255,255,255,.08); border-radius:var(--radius-xl); backdrop-filter:saturate(160%) blur(8px) }
+  .pill { border-radius:999px }
+  .grid { display:grid; gap:28px }
+  .shadow-1 { box-shadow:var(--shadow-1) }
+
+  /* Sticky impact bar */
+  .impact-bar { position:sticky; top:0; z-index:30; background:rgba(10,15,20,.85); backdrop-filter: blur(6px); border-bottom:1px solid rgba(255,255,255,.08) }
+  .impact-inner { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 20px }
+  .impact-inner .mini { display:flex; gap:14px; align-items:center; font-weight:700 }
+  .impact-inner .mini span { display:flex; gap:6px; align-items:center }
+  .impact-inner .mini em { color:var(--amber); font-style:normal }
+  .impact-inner .mini strong { color:var(--cyan) }
+
+  /* Hero */
+  .hero { position:relative; padding: 30px 0 30px; background:var(--grad-1); overflow:hidden }
+  .hero .bg-trails { position:absolute; inset:0; pointer-events:none; }
+  .beam { position:absolute; height:2px; background:var(--grad-2); opacity:.45; filter:drop-shadow(0 0 10px rgba(0,229,255,.7)); animation: glide 10s linear infinite }
+  .beam:nth-child(2){ top:28%; animation-duration:12s }
+  .beam:nth-child(3){ top:58%; animation-duration:8s }
+  @keyframes glide { 0%{ left:30% } 100%{ left:130% } }
+
+  .hero h1 { font-size: clamp(2.2rem, 4vw + 1rem, 4rem); font-weight:900; letter-spacing:-.03em }
+  .hero p.lede { color:#e6f9ff; max-width:900px; margin-top:8px; font-size:1.2rem }
+  .hero .cta { display:flex; gap:14px; flex-wrap:wrap; margin-top:28px }
+  .hero .container > *:not(.car-wrap) {margin-left: 10%; max-width: 1000px;}
+  
+  .car-wrap { margin-top:10px; display:grid; grid-template-columns:1fr; place-items:center }
+  .car { width:min(600px,50%); border-radius:20px; overflow:hidden; box-shadow:var(--shadow-1) }
+  .labels { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:14px }
+  .labels .chip {padding:8px 14px; border:1px solid rgba(255,255,255,.2); border-radius:999px; background:rgba(0,229,255,.08);transition: all 0.3s ease; position: relative; overflow: hidden;}
+
+  /* Value points */
+  .value { padding:60px 0 40px; background:#0f141b }
+  .cards { grid-template-columns: repeat(auto-fit, minmax(260px,1fr)) }
+  .card { padding:28px; border:1px solid rgba(255,255,255,.08); border-radius:18px; background:rgba(255,255,255,.02) }
+  .card h3 { font-size:1.22rem; margin-bottom:6px }
+  .card p { color:#b5c3cf }
+  .card .benefit { margin-top:12px; padding:10px 12px; border-radius:12px; background:rgba(0,229,255,.08); border:1px solid rgba(0,229,255,.22); font-weight:700 }
+
+  /* Research section */
+  .research { padding:40px 0 20px; background:#0a0f14 }
+  
+  /* UPDATED: Grid and Box Styles */
+  .kpis { 
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); 
+    gap: 28px;
+    margin-top: 22px;
+  }
+  
+  .kpis .kpi { 
+    padding: 22px; 
+    text-align: center; 
+    border-radius: 18px; 
+    border: 1px solid rgba(255,255,255,.08); 
+    background: rgba(255,255,255,.02);
+    
+    /* Fix for equal box sizes */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 180px; /* Ensures all boxes are at least this tall */
+  }
+
+  .kpi .num { font-size:2.2rem; font-weight:900; background:var(--grad-2); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent }
+  .kpi .label { color:#b5c3cf }
+  .paper { margin-top:26px; padding:20px; display:flex; gap:20px; align-items:center }
+  .paper a.download { padding:12px 18px; font-weight:800; border-radius:12px; background:rgba(127,211,255,.15); border:1px solid rgba(127,211,255,.4) }
+
+  /* Calculator */
+  .calc { margin-top:34px; padding:22px }
+  .calc .row { display:grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap:16px; margin-top:12px }
+  .calc input, .calc select { width:100%; padding:12px 14px; border-radius:12px; border:1px solid rgba(255,255,255,.1); background:#0c1218; color:#e9f6ff }
+  .calc .out { margin-top:16px; display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:16px }
+  .tile { padding:18px; border-radius:14px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.1) }
+  .tile strong { font-size:1.4rem }
+
+  /* How it works */
+  .how { padding:60px 0; background:#0f141b }
+  .steps { counter-reset: step; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); margin-top:28px }
+  .step { position:relative; padding:22px; border:1px solid rgba(255,255,255,.08); border-radius:18px }
+  .step::before { counter-increment: step; content:counter(step); position:absolute; top:-14px; left:-14px; width:42px; height:42px; display:grid; place-items:center; background:var(--grad-2); color:#001018; border-radius:50%; font-weight:900; box-shadow:var(--shadow-2) }
+
+  /* Final CTA */
+  .cta { padding:80px 0; background:var(--grad-1) }
+  .form { margin-top:18px; display:grid; grid-template-columns:1fr auto; gap:12px }
+  .form input[type="email"] { padding:16px 18px; border-radius:999px; border:1px solid rgba(255,255,255,.15); background:#0c1218; color:#e6f9ff }
+  .form .consent { display:flex; align-items:center; gap:10px; margin-top:8px; color:#b5c3cf; font-size:.95rem }
+  .note { margin-top:14px; color:#9fb1bf; font-size:.95rem }
+
+  footer { padding:30px 0; background:#06090d; color:#8ea0af; text-align:center }
+  .legal a { text-decoration:underline; text-underline-offset:2px }
+
+  /* NEW: Footer social icons */
+  footer .social {
+    margin-top: 14px;
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+  }
+  footer .social a {
+    color: var(--muted);
+    transition: color .3s, transform .3s;
+  }
+  footer .social a:hover {
+    color: var(--cyan);
+    transform: translateY(-2px);
+  }
+
+  /* NEW: Glowing animations for energy circles */
+  @keyframes glow-photonic {
+    0%, 100% { 
+      box-shadow: 0 0 5px rgba(255, 194, 71, 0.3);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    50% { 
+      box-shadow: 0 0 20px rgba(255, 194, 71, 0.8), 0 0 30px rgba(255, 194, 71, 0.4);
+      border-color: rgba(255, 194, 71, 0.6);
+    }
+  }
+
+  @keyframes glow-thermoelectric {
+    0%, 100% { 
+      box-shadow: 0 0 5px rgba(255, 100, 100, 0.3);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    50% { 
+      box-shadow: 0 0 20px rgba(255, 100, 100, 0.8), 0 0 30px rgba(255, 100, 100, 0.4);
+      border-color: rgba(255, 100, 100, 0.6);
+    }
+  }
+
+  @keyframes glow-triboelectric {
+    0%, 100% { 
+      box-shadow: 0 0 5px rgba(0, 229, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    50% { 
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.8), 0 0 30px rgba(0, 229, 255, 0.4);
+      border-color: rgba(0, 229, 255, 0.6);
+    }
+  }
+
+  .labels .chip:nth-child(1) { animation: glow-photonic 3s ease-in-out infinite; animation-delay: 0s; }
+  .labels .chip:nth-child(2) { animation: glow-thermoelectric 3s ease-in-out infinite; animation-delay: 1s; }
+  .labels .chip:nth-child(3) { animation: glow-triboelectric 3s ease-in-out infinite; animation-delay: 2s; }
+
+  /* Enhanced hover effects */
+  .labels .chip:nth-child(1):hover { animation: glow-photonic 1s ease-in-out infinite; }
+  .labels .chip:nth-child(2):hover { animation: glow-thermoelectric 1s ease-in-out infinite; }
+  .labels .chip:nth-child(3):hover { animation: glow-triboelectric 1s ease-in-out infinite; }
+
+  @media (max-width:720px) {
+    .hero .container { grid-template-columns: 1fr; }
+    .hero .container > .car-wrap,
+    .hero .container > .labels { grid-column:1; }
+    .impact-inner { flex-wrap:wrap }
+    .form { grid-template-columns:1fr }
+  }
+
+  /* ==== TEAM CAROUSEL (replaces static grid) ==== */
+  .team { padding:60px 0; background:#0a0f14 }
+  .team .section-title { margin-bottom:6px }
+  .team .section-subtitle { text-align:center; max-width:900px; margin:12px auto 0; } /* centered phrases */
+  .team-carousel { position:relative; display:flex; align-items:center; gap:10px; margin-top:22px }
+  .team-viewport { overflow:hidden; width:100% }
+  .team-track { display:flex; gap:26px; transition: transform .6s ease }
+  .person { flex: 0 0 calc((100% - 26px*3) / 4); position:relative; padding:22px; border-radius:18px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.02); transition: transform .2s, box-shadow .2s, border-color .2s }
+  .person:hover { transform: translateY(-4px); box-shadow: var(--shadow-2); border-color: rgba(127,211,255,.35) }
+  .person .headshot { width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:14px; display:block; filter:saturate(1.05) }
+  .person h3 { font-size:1.15rem; margin-top:12px }
+  .person .role { color:#9fb1bf; font-weight:700; font-size:.95rem }
+  .person p { color:#c9d7e3; margin-top:8px; font-size:.98rem }
+  .team-arrow { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.18); color:#e6f2ff; width:36px; height:36px; border-radius:10px; display:grid; place-items:center; cursor:pointer; transition: background .2s, transform .2s, border-color .2s }
+  .team-arrow:hover { background:rgba(127,211,255,.18); border-color:rgba(127,211,255,.45); transform: translateY(-1px) }
+  .team-arrow:disabled { opacity:.35; cursor:not-allowed }
+  @media (max-width:1024px){ .person{flex:0 0 calc((100% - 26px)/2)} }
+  @media (max-width:640px){
+    .person{flex:0 0 100%}
+    .team-arrow{position:absolute;top:-46px}
+    .team-arrow.prev{right:52px}
+    .team-arrow.next{right:10px}
+    .team-carousel{gap:0}
+  }
+
+  /* === Make header pill button match the form button size === */
+  .impact-inner .btn.pill,
+  .form .btn {
+    padding:14px 24px;
+    font-size:1rem;
+    border-radius:999px;
+  }
+
+  /* ======================== */
+  /* Sticky Floating Social Buttons */
+  /* ======================== */
+  .social-fab {
+    position: fixed;
+    right: max(20px, env(safe-area-inset-right));
+    bottom: max(20px, env(safe-area-inset-bottom));
+    z-index: 60; /* above impact bar and content */
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .social-fab .fab {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    background: var(--glass);
+    border: 1px solid rgba(255,255,255,.18);
+    color: var(--muted);
+    box-shadow: var(--shadow-2);
+    backdrop-filter: saturate(160%) blur(8px);
+    transition: transform .2s ease, color .25s ease, border-color .25s ease, background .25s ease;
+  }
+
+  .social-fab .fab:hover,
+  .social-fab .fab:focus-visible {
+    color: var(--cyan);
+    border-color: rgba(127,211,255,.45);
+    transform: translateY(-2px);
+    background: rgba(255,255,255,.08);
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .social-fab .fab { transition: none; }
+  }
+
+  /* Avoid crowding small screens */
+  @media (max-width: 420px) {
+    .social-fab { display: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="impact-bar">
+    <div class="container impact-inner">
+      <div class="mini">
+        <span>⚡ <strong>Triple-Harvest</strong></span>
+        <span>☀️ <em>Solar</em></span>
+        <span>🔥 <em>Thermal</em></span>
+        <span>💨 <em>Kinetic</em></span>
+      </div>
+      <a class="btn pill" href="#priority">Get Early Access</a>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="bg-trails">
+      <div class="beam" style="top:18%"></div>
+      <div class="beam"></div>
+      <div class="beam"></div>
+    </div>
+    <div class="container">
+      <span class="badge">AuraCharge Skin</span>
+      <h1>Charge Never. Drive Forever.</h1>
+      <p class="lede">A flexible, seven-layer meta-material that turns light, heat and motion into clean electricity while you drive and while you park. Built for durability, designed for autonomy.</p>
+	  <br>
+      <div class="car-wrap">
+       <img class="car" alt="AuraCharge concept car in landscape orientation" src="https://i.postimg.cc/XYyJV33D/AuraCharge-Skin-Car.png" style="width:100%; max-width:900px; border-radius:20px; box-shadow:var(--shadow-1); object-fit:cover; aspect-ratio:16/9;">
+        <div class="labels">
+          <span class="chip">☀️ Photonic Capture</span>
+          <span class="chip">🔥 Thermoelectric</span>
+          <span class="chip">💨 Triboelectric</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="value">
+    <div class="container">
+      <h2 class="section-title">Why fleets and innovators choose AuraCharge</h2>
+      <p class="section-subtitle">Outcomes you can measure, benefits you can feel.</p>
+      <div class="grid cards" style="margin-top:24px">
+        <article class="card">
+          <h3>Never Stop for Gas or Plugs</h3>
+          <p>The AuraCharge Skin is powered by a <strong>Triple-Harvest System</strong> that captures light, heat, and motion to continuously recharge your vehicle's battery while you drive and park.</p>
+          <div class="benefit">💡 <strong>Specific Benefit:</strong> Eliminate the time, expense, and anxiety of finding a charging station on your route. Your car is perpetually ready.</div>
+        </article>
+        <article class="card">
+          <h3>Self-Healing &amp; Durable Surface</h3>
+          <p>Built with advanced meta-materials and designed for longevity, the AuraCharge skin actively resists micro-abrasions and lasts for the life of your vehicle.</p>
+          <div class="benefit">💡 <strong>Specific Benefit:</strong> Enjoy a durable, low-maintenance exterior coating that is more resilient than traditional paint while generating power.</div>
+        </article>
+        <article class="card">
+          <h3>Integrated Energy Ecosystem</h3>
+          <p>When your car is parked at home or work, the AuraCharge system automatically monitors its stored energy and can optionally <strong>sell surplus power</strong> back to your home or the local grid.</p>
+          <div class="benefit">💡 <strong>Specific Benefit:</strong> Turn your parked car into a passive income generator. Your commute now pays you back.</div>
+        </article>
+</div>
+    </div>
+  </section>
+
+  <section id="research-1" class="research">
+    <div class="container">
+      <h2 class="section-title">The Numbers That Matter</h2>
+      <p class="section-subtitle">Proven efficiency. Tested durability. Real-world performance.</p>
+
+      <div class="grid kpis">
+        <div class="kpi">
+          <div class="num">150%</div>
+          <div class="label">Energy Self-Sufficiency</div>
+        </div>
+        <div class="kpi">
+          <div class="num">0</div>
+          <div class="label">Charging Stops Needed</div>
+        </div>
+        <div class="kpi">
+          <div class="num">15+</div>
+          <div class="label">Years Lifespan</div>
+        </div>
+        <div class="kpi">
+          <div class="num">2030</div>
+          <div class="label">Target Launch Year</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="research-2" class="research">
+    <div class="container">
+      <h2 class="section-title">Peer-reviewed results at a glance</h2>
+      <p class="section-subtitle">Pulled from the AuraCharge Research Document and 5,000 hours of road testing.</p>
+
+      <div class="grid kpis">
+        <div class="kpi">
+          <div class="num">48.7%</div>
+	          <div class="label">Peak combined efficiency</div>
+        </div>
+        <div class="kpi">
+          <div class="num">9.2 kWh</div>
+          <div class="label">Typical daily energy yield</div>
+        </div>
+        <div class="kpi">
+          <div class="num">350 W</div>
+          <div class="label">Kinetic power at 80+ km/h</div>
+        </div>
+        <div class="kpi">
+          <div class="num">150 W</div>
+          <div class="label">Thermal harvest during heat events</div>
+        </div>
+        <div class="kpi">
+          <div class="num">ROI 440%</div>
+          <div class="label">Projected lifetime return</div>
+        </div>
+        <div class="kpi">
+          <div class="num">8/10</div>
+          <div class="label">Gravel impact rating (SAE J400)</div>
+        </div>
+      </div>
+
+
+      <div class="glass paper shadow-1">
+        <div style="flex:1">
+          <strong>Research PDF</strong><br>
+          Our research has been replicated, confirmed, and validated through 5,000+ hours of independent lab testing by three research institutions 🔬.
+        </div>
+        <a class="download" href="https://auracharge-research.tiiny.site/" target="_blank" rel="noopener">Download the Research</a>
+      </div>
+
+      <div class="glass calc">
+        <strong>Instant impact for your route</strong>
+        <div class="row">
+          <label>
+            <span style="display:block;margin-bottom:6px;color:#b5c3cf">Average daily drive (km)</span>
+            <input id="km" type="number" value="40" min="0" step="1">
+          </label>
+          <label>
+            <span style="display:block;margin-bottom:6px;color:#b5c3cf">Electricity price ($/kWh)</span>
+            <input id="price" type="number" value="0.20" min="0" step="0.01">
+          </label>
+          <label>
+            <span style="display:block;margin-bottom:6px;color:#b5c3cf">Vehicle segment</span>
+            <select id="segment">
+              <option value="sedan" selected>Standard sedan</option>
+              <option value="suv">SUV</option>
+              <option value="compact">Compact</option>
+            </select>
+          </label>
+        </div>
+        <div class="out">
+          <div class="tile"><div>Estimated daily AuraCharge energy</div><strong id="outKwh">9.2 kWh</strong></div>
+          <div class="tile"><div>Daily savings</div><strong id="outSave">$1.84</strong></div>
+          <div class="tile"><div>Payback horizon</div><strong id="outYears">~3.3 yrs</strong></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="how">
+    <div class="container">
+      <h2 class="section-title">From photons to propulsion — in four steps</h2>
+      <div class="grid steps">
+        <div class="step">
+          <h3>1. Spectral splitting + tandem PV</h3>
+          <p>Perovskite QDs plus a CIGS/Ge tandem capture wide-spectrum light with flexible efficiency leadership.</p>
+        </div>
+        <div class="step">
+          <h3>2. Thermoelectric recovery</h3>
+          <p>Seebeck-effect polymers turn temperature gradients into power during charging and sustained drives.</p>
+        </div>
+        <div class="step">
+          <h3>3. Triboelectric harvesting</h3>
+          <p>Airflow and chassis vibration create additional current at speed and in windy conditions — even at night.</p>
+        </div>
+        <div class="step">
+          <h3>4. AI-PMIC orchestration</h3>
+          <p>Route-aware control prioritizes the best source moment by moment and exports surplus to your home or grid.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TEAM: Carousel (4 visible, auto + manual) ===== -->
+  <section id="team" class="team">
+    <div class="container">
+      <h2 class="section-title">Meet our experts</h2>
+      <p class="section-subtitle">The people behind AuraCharge’s triple-harvest meta-skin.</p>
+
+      <div class="team-carousel" data-autoplay="true">
+        <button class="team-arrow prev" aria-label="Previous team members">◀</button>
+        <div class="team-viewport" aria-live="polite">
+          <div class="team-track">
+
+            <article class="person">
+              <img class="headshot" loading="lazy" src="https://i.postimg.cc/4dg6VKMK/Priya.jpg" alt="Dr. Priya Malhotra — Lead Materials Scientist, South Asian woman with confident smile in blouse.">
+              <h3>Dr. Priya Malhotra</h3>
+              <div class="role">Lead Materials Scientist</div>
+              <p>Priya holds a PhD in Materials Chemistry from IIT Delhi and did her post-doc at Stanford on flexible perovskites and metamaterials. She leads the development of AuraCharge’s triple-harvest meta-skin, combining solar, thermal, and kinetic energy capture in a single ultra-thin layer. 12+ years turning impossible nanomaterials into real-world products.</p>
+            </article>
+
+            <article class="person">
+              <img class="headshot" loading="lazy" src="https://i.postimg.cc/85SRMF3t/Elias.jpg" alt="Dr. Elias Nordström — Chief Energy Systems Engineer, white male with beard and thoughtful gaze in a collared shirt.">
+              <h3>Dr. Elias Nordström</h3>
+              <div class="role">Chief Energy Systems Engineer</div>
+              <p>With a background in electrical engineering from KTH Stockholm and over 15 years at Volvo and Northvolt, Elias architected the intelligent power-routing system that dynamically balances harvested energy across solar, thermal, and triboelectric sources while keeping the vehicle’s battery topped up without ever slowing you down.</p>
+            </article>
+
+            <article class="person">
+              <img class="headshot" loading="lazy" src="https://i.postimg.cc/hjBLTJwz/Park.jpg" alt="Dr. Soo-jin Park — Triboelectric Nanogenerator Specialist, East Asian woman with warm expression wearing a sweater.">
+              <h3>Dr. Soo-jin Park</h3>
+              <div class="role">Triboelectric Nanogenerator Specialist</div>
+              <p>Soo-jin earned her PhD from KAIST and spent six years at Samsung Advanced Institute of Technology pushing the limits of friction-based energy harvesting. She designed the kinetic layer in AuraCharge that turns every bump, turn, and wind gust into usable electricity—quietly and invisibly.</p>
+            </article>
+
+            <article class="person">
+              <img class="headshot" loading="lazy" src="https://i.postimg.cc/1tQGwgTq/Marcus.jpg" alt="Marcus Okafor — AI Power-Management Lead, Black male with engaging look in a button-up shirt.">
+              <h3>Marcus Okafor</h3>
+              <div class="role">AI Power-Management Lead</div>
+              <p>Marcus previously built predictive energy models for Tesla’s fleet and holds a Master’s in Machine Learning from MIT. His real-time AI decides—millisecond by millisecond—how to allocate harvested electrons for maximum range extension and battery longevity, adapting to your driving style and the weather.</p>
+            </article>
+
+            <article class="person">
+              <img class="headshot" loading="lazy" src="https://i.postimg.cc/50VBLHGz/Fiona.jpg" alt="Dr. Fiona Reilly — Perovskite & Photonics Researcher, white woman with red hair and bright smile in a cardigan.">
+              <h3>Dr. Fiona Reilly</h3>
+              <div class="role">Perovskite &amp; Photonics Researcher</div>
+              <p>Irish-born Fiona completed her doctorate at Oxford on next-generation tandem solar cells. She fine-tuned AuraCharge’s embedded perovskite micro-cells to deliver class-leading efficiency even under diffuse light and at extreme angles—perfect for a car that parks outside all day.</p>
+            </article>
+
+            <article class="person">
+              <img class="headshot" loading="lazy" src="https://i.postimg.cc/cHSRwKj4/Diego.jpg" alt="Diego Morales — Thermal Harvesting Engineer, Latinx male giving a professional nod in a polo.">
+              <h3>Diego Morales, M.Sc.</h3>
+              <div class="role">Thermal Harvesting Engineer</div>
+              <p>Diego spent a decade at Continental and Bosch developing thermoelectric solutions for automotive exhaust systems. At AuraCharge he repurposed that expertise to capture waste heat from the cabin, brakes, and electronics, converting temperature gradients into meaningful charge with zero moving parts.</p>
+            </article>
+
+          </div>
+        </div>
+        <button class="team-arrow next" aria-label="Next team members">▶</button>
+      </div>
+
+      <p class="section-subtitle" style="margin-top:24px">Together we’re turning every journey—and every moment parked in the sun—into free, silent range.</p>
+    </div>
+  </section>
+
+  <section id="priority" class="cta">
+    <div class="container">
+      <h2 class="section-title">Be first. Shape the standard.</h2>
+      <p class="section-subtitle">Join a limited early cohort for pilots, whitepapers and pre-order access.</p>
+      <form id="form" class="form" novalidate>
+        <input id="email" type="email" inputmode="email" placeholder="Your email" aria-describedby="help" required>
+        <button class="btn" type="submit">Join Priority List →</button>
+        <label class="consent"><input id="ok" type="checkbox" required> I agree to receive updates about AuraCharge.</label>
+      </form>
+      <div id="help" class="note">We'll never sell your data. You can unsubscribe at any time.</div>
+      <div id="status" class="note" role="status" aria-live="polite" style="display:none"></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div>© 2025 AuraCharge Technologies</div>
+      <div class="legal"><a href="#">Privacy</a> · <a href="#">Terms</a></div>
+
+      <!-- Social Media Icons in Footer -->
+      <div class="social" aria-label="AuraCharge social links">
+        <a href="https://facebook.com" target="_blank" aria-label="Facebook" rel="noopener">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12.07C22 6.55 17.52 2 12 2S2 6.55 2 12.07C2 17.06 5.66 21.19 10.44 22v-7.03H7.9v-2.9h2.54v-2.2c0-2.5 1.5-3.89 3.79-3.89 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.55v1.88h2.78l-.44 2.9h-2.34V22C18.34 21.19 22 17.06 22 12.07z"/></svg>
+        </a>
+        <a href="https://x.com" target="_blank" aria-label="X (Twitter)" rel="noopener">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.36 2H21l-6.56 7.5L21.5 22h-5.38l-4.2-6.1L7 22H3.5l7.05-8.06L2.5 2h5.5l3.7 5.4L15.8 2h2.56z"/></svg>
+        </a>
+        <a href="https://linkedin.com" target="_blank" aria-label="LinkedIn" rel="noopener">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3A2 2 0 0 1 21 5V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3H19M8.34 17V10.47H5.67V17H8.34M7 9.27A1.55 1.55 0 1 0 7 6.17A1.55 1.55 0 0 0 7 9.27M18.33 17V13.35C18.33 11.54 17.41 10.47 15.76 10.47C14.66 10.47 13.95 11.08 13.67 11.73H13.64V10.47H11V17H13.71V13.66C13.71 12.94 13.86 12.26 14.76 12.26C15.65 12.26 15.68 13.05 15.68 13.71V17H18.33Z"/></svg>
+        </a>
+        <a href="https://instagram.com" target="_blank" aria-label="Instagram" rel="noopener">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9zm4.5 3a5.5 5.5 0 1 1 0 11a5.5 5.5 0 0 1 0-11zm0 2a3.5 3.5 0 1 0 0 7a3.5 3.5 0 0 0 0-7zm5.25-.75a1.25 1.25 0 1 1 0 2.5a1.25 1.25 0 0 1 0-2.5z"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Sticky Social Floating Buttons -->
+  <nav class="social-fab" aria-label="Follow AuraCharge">
+    <a class="fab" href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M22 12.07C22 6.55 17.52 2 12 2S2 6.55 2 12.07C2 17.06 5.66 21.19 10.44 22v-7.03H7.9v-2.9h2.54v-2.2c0-2.5 1.5-3.89 3.79-3.89 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.55v1.88h2.78l-.44 2.9h-2.34V22C18.34 21.19 22 17.06 22 12.07z"/>
+      </svg>
+    </a>
+
+    <a class="fab" href="https://x.com" target="_blank" rel="noopener" aria-label="X (Twitter)">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M18.36 2H21l-6.56 7.5L21.5 22h-5.38l-4.2-6.1L7 22H3.5l7.05-8.06L2.5 2h5.5l3.7 5.4L15.8 2h2.56z"/>
+      </svg>
+    </a>
+
+    <a class="fab" href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M19 3A2 2 0 0 1 21 5V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3H19M8.34 17V10.47H5.67V17H8.34M7 9.27A1.55 1.55 0 1 0 7 6.17A1.55 1.55 0 0 0 7 9.27M18.33 17V13.35C18.33 11.54 17.41 10.47 15.76 10.47C14.66 10.47 13.95 11.08 13.67 11.73H13.64V10.47H11V17H13.71V13.66C13.71 12.94 13.86 12.26 14.76 12.26C15.65 12.26 15.68 13.05 15.68 13.71V17H18.33Z"/>
+      </svg>
+    </a>
+
+    <a class="fab" href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9zm4.5 3a5.5 5.5 0 1 1 0 11a5.5 5.5 0 0 1 0-11zm0 2a3.5 3.5 0 1 0 0 7a3.5 3.5 0 0 0 0-7zm5.25-.75a1.25 1.25 0 1 1 0 2.5a1.25 1.25 0 0 1 0-2.5z"/>
+      </svg>
+    </a>
+  </nav>
+
+<script>
+  // Client-side calculator with dynamic driving logic
+  (function() {
+    const km = document.getElementById('km');
+    const price = document.getElementById('price');
+    const seg = document.getElementById('segment');
+    const outKwh = document.getElementById('outKwh');
+    const outSave = document.getElementById('outSave');
+    const outYears = document.getElementById('outYears');
+
+    function recompute() {
+      // 1. Get the user's driving distance
+      const distance = parseFloat(km ? km.value : 40) || 40;
+
+      // 2. Define our constants
+      // We assume ~6.0 kWh comes from solar (parking) 
+      // and ~0.08 kWh comes from kinetic/thermal per km driven.
+      // (6.0 + 40km * 0.08 = 9.2 kWh baseline)
+      const solarBase = 6.0; 
+      const energyPerKm = 0.08; 
+
+      // 3. Calculate raw energy
+      let totalYield = solarBase + (distance * energyPerKm);
+
+      // 4. Apply vehicle segment modifier (larger cars = more surface area)
+      const segEl = seg ? seg.value : 'sedan';
+      const segF = segEl === 'suv' ? 1.05 : segEl === 'compact' ? 0.9 : 1.0;
+      
+      const dailyKwh = (totalYield * segF).toFixed(1);
+      const p = Math.max(0, parseFloat(price ? price.value : 0.20) || 0.20);
+      const save = (dailyKwh * p).toFixed(2);
+      const systemCost = 2250; // USD cost
+      const years = (systemCost / (save * 300 || 1)).toFixed(1);
+
+      if(outKwh) outKwh.textContent = dailyKwh + ' kWh';
+      if(outSave) outSave.textContent = '$' + save;
+      if(outYears) outYears.textContent = (isFinite(years) ? '~' + years + ' yrs' : '—');
+    }
+
+    // Listen for changes if calculator exists on page
+    [km, price, seg].filter(Boolean).forEach(el => el.addEventListener('input', recompute));
+    recompute();
+  })();
+
+  // Form handler (simple demo)
+  (function() {
+    const f = document.getElementById('form');
+    const email = document.getElementById('email');
+    const ok = document.getElementById('ok');
+    const status = document.getElementById('status');
+    if(!f) return;
+    f.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const valid = email.value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/) && ok.checked;
+      status.style.display='block';
+      status.textContent = valid ? 'Thanks! Check your inbox for confirmation.' : 'Enter a valid email and consent to updates.';
+      if(valid) f.reset();
+    });
+  })();
+
+  // ===== Team carousel JS (auto + manual) =====
+  (function(){
+    const section=document.querySelector('#team');
+    if(!section) return;
+    const viewport=section.querySelector('.team-viewport');
+    const track=section.querySelector('.team-track');
+    const prev=section.querySelector('.team-arrow.prev');
+    const next=section.querySelector('.team-arrow.next');
+    let index=0;
+    const cards=Array.from(track.children);
+    const GAP=26;
+
+    const getVis=()=>window.innerWidth>=1024?4:window.innerWidth>=640?2:1;
+    const getStep=()=>cards[0].getBoundingClientRect().width+GAP;
+    const clamp=i=>Math.min(Math.max(0,i),Math.max(0,cards.length-getVis()));
+
+    function update(){
+      index=clamp(index);
+      track.style.transform=`translateX(${-index*getStep()}px)`;
+      prev.disabled=index<=0;
+      next.disabled=index>=cards.length-getVis();
+    }
+    function step(d){ index+=getVis()*d; update(); }
+
+    prev.addEventListener('click',()=>step(-1));
+    next.addEventListener('click',()=>step(1));
+    section.addEventListener('keydown',(e)=>{ if(e.key==='ArrowLeft')step(-1); if(e.key==='ArrowRight')step(1); });
+    window.addEventListener('resize',update,{passive:true});
+
+    // autoplay with pause on hover/focus
+    let timer=null;
+    const AUTOMS=2000;
+    const start=()=>{ if(timer) return; timer=setInterval(()=>{
+      if(index>=cards.length-getVis()){ index=0; } else { index+=getVis(); }
+      update();
+    },AUTOMS);};
+    const stop=()=>{ clearInterval(timer); timer=null; };
+
+    [section, prev, next, viewport].forEach(el=>{
+      el.addEventListener('mouseenter',stop);
+      el.addEventListener('mouseleave',start);
+      el.addEventListener('focusin',stop);
+      el.addEventListener('focusout',start);
+      el.addEventListener('touchstart',stop,{passive:true});
+    });
+
+    update(); start();
+  })();
+</script>
+</body>
+</html>
