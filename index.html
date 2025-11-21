@@ -278,10 +278,22 @@
     .social-fab { display: none; }
   }
 
-  /* === Disclaimer Section === */
-  .disclaimer { padding:24px 0; background:#06090d; color:#8ea0af; border-top:1px solid rgba(255,255,255,.08) }
-  .disclaimer .container { text-align:center; font-size:.9rem; line-height:1.5 }
-  .disclaimer a { text-decoration:underline; text-underline-offset:2px }
+  /* === Disclaimer Section: enhanced to match glass aesthetic === */
+  .disclaimer { padding:48px 0; background:#06090d; color:#9fb1bf; border-top:1px solid rgba(255,255,255,.08) }
+  .disclaimer .panel { 
+    margin:0 auto; 
+    max-width:900px; 
+    padding:22px 24px; 
+    border-radius:18px; 
+    background:rgba(255,255,255,.03); 
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow: var(--shadow-1);
+    text-align:left;
+  }
+  .disclaimer h2 { font-size:1.4rem; font-weight:800; letter-spacing:-.01em; margin-bottom:8px }
+  .disclaimer p, .disclaimer li { color:#c2d1dc; }
+  .disclaimer ul { margin:10px 0 0 1.1rem; display:grid; gap:.2rem }
+  .disclaimer a { color:var(--sky); text-decoration:underline; text-underline-offset:2px }
 
 </style>
 </head>
@@ -436,7 +448,7 @@
 <div class="grid steps">
 <div class="step">
 <h3>1. Spectral splitting + tandem PV</h3>
-<p>Perovskite QDs plus a CIGS/Ge tandem capture wide-spectrum light with flexible efficiency leadership.</p>
+<p>Coordinated solar layers capture wide-spectrum light with flexible efficiency leadership.</p>
 </div>
 <div class="step">
 <h3>2. Thermoelectric recovery</h3>
@@ -539,7 +551,22 @@
 </div>
 </div>
 </footer>
-<section aria-label="AI usage disclaimer" class="disclaimer" id="disclaimer"><div class="container mx-auto text-center py-12"><div class="max-w-3xl mx-auto"><h2 class="text-2xl font-semibold mb-4">Disclaimer</h2><p class="text-base text-gray-300">All strategic direction, ideation, layout concepts, and written content are original works of Alaaeddine Abdallah<br> The design aesthetic was inspired by dark landing page concepts from https://dribbble.com/tags/dark-landing-page<br> Code development, CSS effects, and technical phrases were created with assistance from ChatGPT and Claude AI<br> Research paper was built using AGIT template from https://www.overleaf.com/latex/templates/agit-template-2026/rsznzsdbzrgf<br> Car imagery was created with assistance from Gemini AI <br> Team headshots were created with assistance from Grok AI</p></div></div></section>
+<section aria-label="Credits & tools" class="disclaimer" id="disclaimer">
+  <div class="container">
+    <div class="panel" role="note" aria-label="About this page">
+      <h2>Disclaimer</h2>
+      <ul>
+        <li><strong>Concept:</strong> All strategic direction, ideation, layout, and written content are original works of Alaaeddine Abdallah</li>
+        <li><strong>Visual inspiration:</strong> The design aesthetic was inspired by dark landing page concepts from https://dribbble.com/tags/dark-landing-page</li>
+        <li><strong>Code & effects:</strong> code development, CSS effects, and technical phrases were created with assistance from ChatGPT and Claude AI</li>
+        <li><strong>Research template:</strong> adapted from AGIT template https://www.overleaf.com/latex/templates/agit-template-2026/rsznzsdbzrgf</li>
+        <li><strong>Car Image:</strong> created with assistance from Gemini Banana AI</li>
+		<li><strong>Team Images:</strong> created with assistance from Grok AI</li>
+      </ul>
+      <p style="margin-top:10px;font-size:.95rem">This page is a conceptual product vision. All numbers and claims are illustrative and created solely for the purpose of this assignment.</p>
+    </div>
+  </div>
+</section>
 <!-- Sticky Social Floating Buttons -->
 <nav aria-label="Follow AuraCharge" class="social-fab">
 <a aria-label="Facebook" class="fab" href="https://facebook.com" rel="noopener" target="_blank">
