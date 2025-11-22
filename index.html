@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
@@ -182,7 +181,7 @@
       border-color: rgba(0, 229, 255, 0.6);
     }
   }
-
+ 
   .labels .chip:nth-child(1) { animation: glow-photonic 3s ease-in-out infinite; animation-delay: 0s; }
   .labels .chip:nth-child(2) { animation: glow-thermoelectric 3s ease-in-out infinite; animation-delay: 1s; }
   .labels .chip:nth-child(3) { animation: glow-triboelectric 3s ease-in-out infinite; animation-delay: 2s; }
@@ -191,6 +190,31 @@
   .labels .chip:nth-child(1):hover { animation: glow-photonic 1s ease-in-out infinite; }
   .labels .chip:nth-child(2):hover { animation: glow-thermoelectric 1s ease-in-out infinite; }
   .labels .chip:nth-child(3):hover { animation: glow-triboelectric 1s ease-in-out infinite; }
+
+  /* === NEW: CTA chip amber glow (only the anchor) === */
+  @keyframes glow-cta {
+    0%, 100% {
+      box-shadow: 0 0 6px rgba(255,194,71,.35), 0 0 0 rgba(255,194,71,0);
+      border-color: rgba(255,255,255,.2);
+    }
+    50% {
+      box-shadow: 0 0 24px rgba(255,194,71,.9), 0 0 60px rgba(255,194,71,.45);
+      border-color: rgba(255,194,71,.6);
+    }
+  }
+  .labels a.chip[href="#priority"] {
+    color: var(--amber);
+    background: rgba(255,194,71,.10);
+    border-color: rgba(255,194,71,.45);
+    text-shadow: 0 0 6px rgba(255,194,71,.6);
+    animation: glow-cta 2s ease-in-out infinite;
+    transition: background .25s ease, border-color .25s ease, transform .2s ease;
+  }
+  .labels a.chip[href="#priority"]:hover {
+    background: rgba(255,194,71,.16);
+    animation-duration: 1.2s;
+    transform: translateY(-1px);
+  }
 
   @media (max-width:720px) {
     .hero .container { grid-template-columns: 1fr; }
@@ -326,6 +350,7 @@
 <span class="chip">☀️ Photonic Capture</span>
 <span class="chip">🔥 Thermoelectric</span>
 <span class="chip">💨 Triboelectric</span>
+<a class="chip" href="#priority">📧 Join the Triple-Harvest journey</a>
 </div>
 </div>
 </div>
@@ -519,8 +544,8 @@
 </section>
 <section class="cta" id="priority">
 <div class="container">
-<h2 class="section-title">Be first. Shape the standard.</h2>
-<p class="section-subtitle">Join a limited early cohort for pilots, whitepapers and pre-order access.</p>
+<h2 class="section-title">Lead the Future of EV Energy</h2>
+<p class="section-subtitle">Get early access to AuraCharge pilots, research insights, and pre-order opportunities — spots are limited.</p>
 <form class="form" id="form" novalidate="">
 <input aria-describedby="help" id="email" inputmode="email" placeholder="Your email" required="" type="email"/>
 <button class="btn" type="submit">Join Priority List →</button>
